@@ -7,7 +7,7 @@
 #include <BlynkSimpleEsp8266.h>
 
 // **Blynk and Wi-Fi Credentials**
-char auth[] = "your_blynk_auth_token";  // Replace with your Blynk auth token
+char auth[] = "REDACTED_BLYNK_TOKEN";  // Replace with your Blynk auth token
 char ssid[] = "your_wifi_ssid";         // Replace with your Wi-Fi SSID
 char pass[] = "your_wifi_password";     // Replace with your Wi-Fi password
 

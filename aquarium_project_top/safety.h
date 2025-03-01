@@ -8,5 +8,6 @@ extern String faultMessage;
 
 void setupSafety();
 void checkSafetyConditions(unsigned long currentTime);
+void triggerAlarm();
 
 #endif
