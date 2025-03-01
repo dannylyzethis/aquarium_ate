@@ -7,7 +7,7 @@
 
 bool failSafeMode = false;
 String faultMessage = "";
-
+float tankSalinity = 0.0;
 void setupSafety() {
   pinMode(LEAK_SENSOR_PIN, INPUT);
   pinMode(EMERGENCY_STOP_PIN, INPUT_PULLUP);
@@ -32,6 +32,10 @@ void checkSafetyConditions(unsigned long currentTime) {
     disableAllPumps();
     sendAlert("Emergency Stop Activated");
   }
+  if (tankSalinity > MARINE_SALINITY_MAX && SALTWATER_MODE) {
+    Serial.println("Salinity too high!");
+    triggerAlarm();
+  }
   if (drainPumpState && (currentTime - drainStartTime > DRAIN_TIMEOUT)) {
     digitalWrite(DRAIN_PUMP_PIN, HIGH);
     drainPumpState = false;
@@ -39,4 +43,9 @@ void checkSafetyConditions(unsigned long currentTime) {
     sendAlert("Drain Timeout");
   }
   // Add similar checks for fill, top-off, and RO/DI if needed
+}
+void triggerAlarm() {
+  digitalWrite(BUZZER_PIN, HIGH);
+  delay(1000);  // Buzz for 1 second
+  digitalWrite(BUZZER_PIN, LOW);
 }

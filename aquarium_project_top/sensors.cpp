@@ -39,7 +39,7 @@ void updateSensors() {
   barrelTemp = tempBarrel.getTempCByIndex(0);
   tempSecondary.requestTemperatures();
   secondaryTemp = tempSecondary.getTempCByIndex(0);
-
+  
   humidity = dht.readHumidity();
   roomTemp = dht.readTemperature();
   if (isnan(humidity) || isnan(roomTemp)) {
@@ -60,7 +60,7 @@ void updateSensors() {
   #endif
 }
 
-#if SALTWATER_MODE
+
 float readSalinity(int address) {
   Wire.beginTransmission(address);
   Wire.write("R");
@@ -76,4 +76,4 @@ float readSalinity(int address) {
   float salinity = response.toFloat();
   return (salinity < 0 || salinity > 50) ? -1.0 : salinity;
 }
-#endif
+
