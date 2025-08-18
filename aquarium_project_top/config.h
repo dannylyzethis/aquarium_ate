@@ -4,13 +4,16 @@
 #include <Arduino.h>
 
 // Feature toggles
-#define SALTWATER_MODE 1  // 1 for saltwater, 0 for freshwater
+extern int SALTWATER_MODE;  // 0 for freshwater, 1 for saltwater (set at runtime)
+#define MARINE_SALINITY_MIN 30.0  // Minimum salinity for marine (ppt)
+#define MARINE_SALINITY_MAX 35.0  // Maximum salinity for marine (ppt)
 
 // Pin definitions
 #define DRAIN_PUMP_PIN 2
 #define FILL_PUMP_PIN 3
 #define TOPOFF_PUMP_PIN 4
 #define RODI_VALVE_PIN 5
+#define BUZZER_PIN 12
 #define TANK_TEMP_PIN 26
 #define BARREL_TEMP_PIN 27
 #define SECONDARY_TEMP_PIN 28
