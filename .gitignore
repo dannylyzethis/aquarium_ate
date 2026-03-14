@@ -1,2 +1,3 @@
 # Local secrets (do not commit)
 wifi_module_for_aquarium/secrets.h
+aquarium_project_top/secrets.h

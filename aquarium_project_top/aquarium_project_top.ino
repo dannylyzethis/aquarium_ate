@@ -1,7 +1,7 @@
-#include <avr/wdt.h>
 #include <Arduino.h>
 #include "RTClib.h"
 #include "config.h"
+#include "watchdog_compat.h"
 #include "sensors.h"
 #include "actuators.h"
 #include "safety.h"
@@ -18,7 +18,6 @@ const unsigned long logInterval = 60000;   // Log every minute
 extern RTC_DS3231 rtc;
 void setup() {
   Serial.begin(9600);    // Debugging
-  Serial1.begin(9600);   // ESP8266 (Blynk)
   Serial2.begin(9600);   // Serial commands
   SALTWATER_MODE = 1;  // Global variable: 0 = freshwater, 1 = saltwater
   pinMode(BUZZER_PIN, OUTPUT);
@@ -43,7 +42,7 @@ void setup() {
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set to compile time
   }
 
-  wdt_enable(WDTO_8S);  // Watchdog timer (8s)
+  APP_WDT_ENABLE_8S();
 }
 
 void loop() {
@@ -61,7 +60,7 @@ void loop() {
   }
   handleSerialCommands();
   checkBlynkCommands();  // Check for Blynk commands
-  wdt_reset();  // Reset watchdog
+  APP_WDT_RESET();
 }
 void initializeMode() {
   float initialSalinity = readSalinity(TANK_SALINITY_I2C_ADDRESS);

@@ -1,6 +1,6 @@
-#include <avr/wdt.h>
 #include <Arduino.h>
 #include "config.h"
+#include "watchdog_compat.h"
 #include "actuators.h"
 #include "sensors.h"
 #include "safety.h"
@@ -50,7 +50,7 @@ void performWaterChange() {
   drainPumpState = true;
   drainStartTime = millis();
   while (digitalRead(TANK_LOW_PIN) == HIGH && (millis() - drainStartTime < DRAIN_TIMEOUT)) {
-    wdt_reset();  // Reset watchdog timer
+    APP_WDT_RESET();
   }
   digitalWrite(DRAIN_PUMP_PIN, HIGH);  // Turn off drain pump
   drainPumpState = false;
@@ -71,7 +71,7 @@ void performWaterChange() {
   while (digitalRead(TANK_HIGH_PIN) != HIGH &&
          digitalRead(BARREL_LOW_PIN) == HIGH &&
          (millis() - fillStartTime < FILL_TIMEOUT)) {
-    wdt_reset();  // Reset watchdog timer
+    APP_WDT_RESET();
   }
   digitalWrite(FILL_PUMP_PIN, HIGH);  // Turn off fill pump
   fillPumpState = false;
