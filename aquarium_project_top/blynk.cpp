@@ -11,10 +11,10 @@ void sendToBlynk() {
   Serial1.println("V1:" + String(tankTemp));
   Serial1.println("V2:" + String(barrelTemp));
   Serial1.println("V3:" + String(pH));
-  #if SALTWATER_MODE
-  Serial1.println("V4:" + String(tankSalinity));
-  Serial1.println("V5:" + String(barrelSalinity));
-  #endif
+  if (SALTWATER_MODE) {
+    Serial1.println("V4:" + String(tankSalinity));
+    Serial1.println("V5:" + String(barrelSalinity));
+  }
 }
 
 void checkBlynkCommands() {

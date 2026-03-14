@@ -7,7 +7,18 @@
 
 bool failSafeMode = false;
 String faultMessage = "";
-float tankSalinity = 0.0;
+static unsigned long lastAlertAt = 0;
+static String lastAlertMessage = "";
+const unsigned long ALERT_COOLDOWN_MS = 30000;
+
+static void alertOncePerCooldown(const String &message, unsigned long currentTime) {
+  if (message != lastAlertMessage || (currentTime - lastAlertAt) >= ALERT_COOLDOWN_MS) {
+    sendAlert(message);
+    lastAlertMessage = message;
+    lastAlertAt = currentTime;
+  }
+}
+
 void setupSafety() {
   pinMode(LEAK_SENSOR_PIN, INPUT);
   pinMode(EMERGENCY_STOP_PIN, INPUT_PULLUP);
@@ -18,19 +29,19 @@ void checkSafetyConditions(unsigned long currentTime) {
     failSafeMode = true;
     faultMessage = "Leak Detected";
     disableAllPumps();
-    sendAlert("Leak Detected");
+    alertOncePerCooldown("Leak Detected", currentTime);
   }
   if (tankTemp > MAX_WATER_TEMP || secondaryTemp > MAX_WATER_TEMP) {
     failSafeMode = true;
     faultMessage = "Overheat Detected";
     disableAllPumps();
-    sendAlert("Overheat Detected");
+    alertOncePerCooldown("Overheat Detected", currentTime);
   }
   if (digitalRead(EMERGENCY_STOP_PIN) == LOW) {
     failSafeMode = true;
     faultMessage = "Emergency Stop";
     disableAllPumps();
-    sendAlert("Emergency Stop Activated");
+    alertOncePerCooldown("Emergency Stop Activated", currentTime);
   }
   if (tankSalinity > MARINE_SALINITY_MAX && SALTWATER_MODE) {
     Serial.println("Salinity too high!");
@@ -40,7 +51,7 @@ void checkSafetyConditions(unsigned long currentTime) {
     digitalWrite(DRAIN_PUMP_PIN, HIGH);
     drainPumpState = false;
     faultMessage = "Drain Timeout";
-    sendAlert("Drain Timeout");
+    alertOncePerCooldown("Drain Timeout", currentTime);
   }
   // Add similar checks for fill, top-off, and RO/DI if needed
 }

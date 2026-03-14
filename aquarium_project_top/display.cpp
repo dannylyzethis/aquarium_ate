@@ -23,10 +23,10 @@ void updateDisplay() {
   tft.println(" C");
   tft.print("pH: ");
   tft.println(pH);
-  #if SALTWATER_MODE
-  tft.print("Tank Salinity: ");
-  tft.println(tankSalinity);
-  tft.print("Barrel Salinity: ");
-  tft.println(barrelSalinity);
-  #endif
+  if (SALTWATER_MODE) {
+    tft.print("Tank Salinity: ");
+    tft.println(tankSalinity);
+    tft.print("Barrel Salinity: ");
+    tft.println(barrelSalinity);
+  }
 }

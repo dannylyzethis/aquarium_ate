@@ -1,15 +1,12 @@
-#define BLYNK_TEMPLATE_ID "TMPL2v32vtEWS"
-#define BLYNK_TEMPLATE_NAME "aquarium"
-#define BLYNK_AUTH_TOKEN "REDACTED_BLYNK_TOKEN"
-
+#include "secrets.h"
 
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
 // **Blynk and Wi-Fi Credentials**
-char auth[] = "REDACTED_BLYNK_TOKEN";  // Replace with your Blynk auth token
-char ssid[] = "your_wifi_ssid";         // Replace with your Wi-Fi SSID
-char pass[] = "your_wifi_password";     // Replace with your Wi-Fi password
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = WIFI_SSID;
+char pass[] = WIFI_PASS;
 
 void setup() {
   Serial.begin(9600);  // Match baud rate with Arduino Mega (Serial1)
@@ -23,7 +20,7 @@ void loop() {
     command.trim();
     if (command.startsWith("NOTIFY:")) {
       String message = command.substring(7);  // Extract message after "NOTIFY:"
-      Blynk.notify(message);  // Send notification to Blynk app
+      Blynk.logEvent("aquarium_alert", message);  // Send notification/event to Blynk
     }
   }
 }

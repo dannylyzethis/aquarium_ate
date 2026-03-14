@@ -15,9 +15,7 @@ DallasTemperature tempSecondary(&oneWireSecondary);
 DHT dht(DHT_PIN, DHT22);
 
 float tankTemp = 0.0, barrelTemp = 0.0, secondaryTemp = 0.0, pH = 0.0, tds = 0.0, turbidity = 0.0, roomTemp = 0.0, humidity = 0.0;
-#if SALTWATER_MODE
 float tankSalinity = 0.0, barrelSalinity = 0.0;
-#endif
 String tankLevel = "OK", barrelLevel = "OK";
 
 void setupSensors() {
@@ -54,10 +52,13 @@ void updateSensors() {
   tds = analogRead(TDS_PIN) / 1023.0 * 5000.0;  // Simplified
   turbidity = analogRead(TURB_PIN) / 1023.0 * 100.0;  // Simplified
 
-  #if SALTWATER_MODE
+  if (SALTWATER_MODE) {
     tankSalinity = readSalinity(TANK_SALINITY_I2C_ADDRESS);
     barrelSalinity = readSalinity(BARREL_SALINITY_I2C_ADDRESS);
-  #endif
+  } else {
+    tankSalinity = 0.0;
+    barrelSalinity = 0.0;
+  }
 }
 
 

@@ -17,10 +17,14 @@ void handleSerialCommands() {
     else if (cmd == "TURBIDITY") Serial2.println(String(turbidity, 1));
     else if (cmd == "LEVEL_TANK") Serial2.println(tankLevel);
     else if (cmd == "LEVEL_BARREL") Serial2.println(barrelLevel);
-    #if SALTWATER_MODE
-    else if (cmd == "SALINITY_TANK") Serial2.println(String(tankSalinity, 1));
-    else if (cmd == "SALINITY_BARREL") Serial2.println(String(barrelSalinity, 1));
-    #endif
+    else if (cmd == "SALINITY_TANK") {
+      if (SALTWATER_MODE) Serial2.println(String(tankSalinity, 1));
+      else Serial2.println("N/A (freshwater mode)");
+    }
+    else if (cmd == "SALINITY_BARREL") {
+      if (SALTWATER_MODE) Serial2.println(String(barrelSalinity, 1));
+      else Serial2.println("N/A (freshwater mode)");
+    }
     
     else if (cmd == "DRAIN_ON" && !failSafeMode) {
       digitalWrite(DRAIN_PUMP_PIN, LOW);

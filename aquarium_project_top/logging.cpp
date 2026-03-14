@@ -41,12 +41,12 @@ void logData() {
     logFile.println(barrelTemp);
     logFile.print("pH: ");
     logFile.println(pH);
-    #if SALTWATER_MODE
-    logFile.print("Tank Salinity: ");
-    logFile.println(tankSalinity);
-    logFile.print("Barrel Salinity: ");
-    logFile.println(barrelSalinity);
-    #endif
+    if (SALTWATER_MODE) {
+      logFile.print("Tank Salinity: ");
+      logFile.println(tankSalinity);
+      logFile.print("Barrel Salinity: ");
+      logFile.println(barrelSalinity);
+    }
     
     logFile.close();  // Close the file
   } else {
